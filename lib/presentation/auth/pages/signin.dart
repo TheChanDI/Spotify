@@ -36,8 +36,7 @@ class _SignInPageState extends State<SignInPage> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(failure)));
     }, (success) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Login Successfully.")));
+      Navigator.pushNamedAndRemoveUntil(context, '/root', (_) => false);
     });
   }
 

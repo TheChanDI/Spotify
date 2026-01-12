@@ -10,7 +10,7 @@ import 'package:spotify/presentation/auth/pages/signup_or_signin.dart';
 import 'package:spotify/presentation/choose%20mode/bloc/theme_cubit.dart';
 import 'package:spotify/presentation/choose%20mode/pages/choose_mode.dart';
 import 'package:spotify/presentation/intro/pages/get_started.dart';
-import 'package:spotify/presentation/root/pages/root.dart';
+import 'package:spotify/presentation/home/pages/home.dart';
 import 'package:spotify/presentation/splash/pages/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:spotify/service.locator.dart';
@@ -56,7 +56,7 @@ class MainApp extends StatelessWidget {
               '/signin_or_signup': (context) => const SignupOrSigninPage(),
               '/signup': (context) => SignupPage(),
               '/signin': (context) => SignInPage(),
-              '/root': (context) => const RootPage(),
+              '/root': (context) => const HomePage(),
             },
             home: const SplashPage()),
       ),
