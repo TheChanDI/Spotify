@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:spotify/data/models/auth/create_user_req.dart';
@@ -35,12 +36,28 @@ class AuthFirebaseServiceImplementation implements AuthFirebaseService {
   @override
   Future<Either> signUp(CreateUserReq createUserreq) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      var cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: createUserreq.email,
         password: createUserreq.password,
       );
 
-      return Right("Signup was Successfull.");
+      final user = cred.user;
+      if (user == null) {
+        return const Left("Signup failed: user is null.");
+      }
+
+      // Optional: set display name (so FirebaseAuth user has it too)
+      await user.updateDisplayName(createUserreq.fullName);
+      await user.reload();
+
+      await FirebaseFirestore.instance.collection('users').add({
+        'uid': user.uid,
+        'name': createUserreq.fullName,
+        'email': user.email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      return const Right("Signup was Successfull.");
     } on FirebaseAuthException catch (err) {
       String msg = '';
       if (err.code == 'email-already-in-use') {
